@@ -449,22 +449,8 @@ class _MapboxMapOptions {
 
   Map<String, dynamic> updatesMap(_MapboxMapOptions newOptions) {
     final Map<String, dynamic> prevOptionsMap = toMap();
-    final newOptionsMap = newOptions.toMap();
-
-    // if any gesture is updated also all other gestures have to the saved to
-    // the update
-
-    final gesturesRequireUpdate =
-        _gestureGroup.any((key) => newOptionsMap[key] != prevOptionsMap[key]);
-
-    return newOptionsMap
-      ..removeWhere((String key, dynamic value) {
-        if (_gestureGroup.contains(key)) return !gesturesRequireUpdate;
-        final oldValue = prevOptionsMap[key];
-        if (oldValue is List && value is List) {
-          return listEquals(oldValue, value);
-        }
-        return oldValue == value;
-      });
+    return newOptions.toMap()
+      ..removeWhere(
+              (String key, dynamic value) => prevOptionsMap[key] == value);
   }
 }
